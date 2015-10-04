@@ -1,0 +1,43 @@
+buildscript{
+    repositories{
+        maven { url "${artifactory_contextUrl}/${repo}" }
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin : "java"
+apply plugin : "spring-boot"
+apply plugin : "idea"
+
+springBoot {
+    executable = true
+}
+
+jar {
+    baseName = 'configserver'
+}
+
+repositories {
+    maven { url "${artifactory_contextUrl}/${repo}" }
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "http://repo.spring.io/milestone" }
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-starter-parent:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    compile("org.springframework.cloud:spring-cloud-config-server")
+    compile('org.springframework.boot:spring-boot-devtools')
+}
